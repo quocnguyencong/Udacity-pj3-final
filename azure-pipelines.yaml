@@ -82,6 +82,8 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
+        ommandOptions: |
+            -auto-approve
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
