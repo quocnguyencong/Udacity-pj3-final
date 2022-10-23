@@ -8,7 +8,7 @@ trigger:
 
 # ToDo: Replace the agent pool name, if you are using Udacity Cloud lab. 
 # Otherwise, comment out the line below. 
-pool: myAgentPool
+pool: myAgent
 
 variables:
   python.version: '3.7.6'
@@ -33,7 +33,7 @@ stages:
     - task: TerraformInstaller@0
       displayName: 'Terrafom installation'
       inputs:
-        terraformVersion: '1.2.9'
+        terraformVersion: '1.3.3'
     
     # Run Terraform Init on the pipeline agent 
     # ToDo: Replace the resource group name, storage account name, and container name below
@@ -47,7 +47,7 @@ stages:
         backendAzureRmResourceGroupName: 'Azuredevops'
         backendAzureRmStorageAccountName: 'tfstate2221322342'
         backendAzureRmContainerName: 'tfstate'
-        backendAzureRmKey: 'qdLWp3HW5uPBCuGdCdYr5HarigUs4TQY3cMqYJcLSHPJ04Y9sAXI2iLIUaI+mBVTjNnawE6mNzK3+AStakGesw=='
+        backendAzureRmKey: 'terraform.tfstate'
 
     # ToDo: Run Terraform Validate    
     - task: TerraformTaskV3@3
@@ -55,6 +55,8 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
     # OPTIONAL - This step is needed only if your Terraform VM uses an SSH key pair for login and you want your pipeline agent to connect to it. 
     # Generate an SSH key pair in your local/AZ Cloud shell. Use the public key in the Terraform VM module. 
@@ -80,6 +82,8 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
+        ommandOptions: |
+            -auto-approve
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
