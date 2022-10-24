@@ -62,8 +62,9 @@ module "vm" {
   name            = "myVM"
   location        = "${var.location}"
   #resource_group  = "${module.resource_group.resource_group_name}"
-  resource_group = "${var.resource_group}"
+  resource_group  = "${var.resource_group}"
   subnet_id       = "${module.network.subnet_id_test}"
   public_ip       = "${module.publicip.public_ip_address_id}"
+  vm_image_id     = "${var.vm_image_id}"
   #admin_username  = "${var.admin_username}"
 }

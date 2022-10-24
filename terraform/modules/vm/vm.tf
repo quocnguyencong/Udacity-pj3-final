@@ -16,9 +16,11 @@ resource "azurerm_linux_virtual_machine" "test" {
   location            = "${var.location}"
   resource_group_name = "${var.resource_group}"
   size                = "Standard_DS2_v2"
-  #admin_username      = "${var.admin_username}"
+  #admin_username     = "${var.admin_username}"
   admin_username      = "adminuser" 
   network_interface_ids = ["${azurerm_network_interface.test.id}"]
+  source_image_id      = "${var.vm_image_id}"
+  disable_password_authentication = true
   admin_ssh_key {
     #username   = "${var.admin_username}"
     username   = "adminuser"
@@ -28,10 +30,10 @@ resource "azurerm_linux_virtual_machine" "test" {
     caching           = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
+  # source_image_reference {
+  #   publisher = "Canonical"
+  #   offer     = "UbuntuServer"
+  #   sku       = "18.04-LTS"
+  #   version   = "latest"
+  # }
 }
