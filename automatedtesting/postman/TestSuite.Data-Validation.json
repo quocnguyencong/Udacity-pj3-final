@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "d01154f0-b6c2-4c7e-ae1e-04c0bfaba39e",
+		"name": "Starter APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful response\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"success\");",
+							"});",
+							"var json = pm.response.json();",
+							"pm.test(\"Validate data added\", function () {",
+							"    pm.expect(json.data.name).to.eql(pm.environment.get(\"name\"));",
+							"    pm.expect(json.data.salary).to.eql(pm.environment.get(\"salary\"));",
+							"    pm.expect(json.data.age).to.eql(pm.environment.get(\"age\"));",
+							"});",
+							"pm.environment.set(\"id\", json.data.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{name}}\",\n    \"salary\": \"{{salary}}\",\n    \"age\": \"{{age}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://dummy.restapiexample.com/api/v1/create",
+					"protocol": "http",
+					"host": [
+						"dummy",
+						"restapiexample",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Employees",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful response\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"success\");",
+							"});",
+							"",
+							"var totalEmployee = 24;",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Test employee ids pulled\", function () {",
+							"    for(i = 0; i < totalEmployee; i++){",
+							"        pm.expect(jsonData.data[i].id).to.eql(i + 1);",
+							"    }",
+							"});",
+							"pm.test(\"Test total employee\", function () {",
+							"    pm.expect(jsonData.data.length).to.eql(totalEmployee);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://dummy.restapiexample.com/api/v1/employees",
+					"protocol": "http",
+					"host": [
+						"dummy",
+						"restapiexample",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
