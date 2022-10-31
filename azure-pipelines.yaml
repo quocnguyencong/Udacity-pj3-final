@@ -27,43 +27,34 @@ stages:
   jobs:
   - job: BuildInfrastructure
     steps:
+    
     #--------------------------------------------#    
-    # FakeRestAPI - Archive
-    # ToDo: Complete the ArchiveFiles@2 task and publish step 
-    - task: ArchiveFiles@2
-      displayName: 'Archive FakeRestAPI'
+    # Postman - Install Newman    
+    # ToDo: Update the command and verify the working directory
+    - task: CmdLine@2
+      displayName: Install Newman
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
-        includeRootFolder: false
-        archiveType: "zip"
-        archiveFile: '$(Build.BuildId)-fakerestapi.zip'
-    # FakeRestAPI - Publish    
-    - publish: $(Build.BuildId)-fakerestapi.zip
-      displayName: 'Upload Package'
-      artifact: drop-fakerestapi
-
-#--------------------------------------------#  
-# DEPLOYMENT STAGE
-#--------------------------------------------#    
-- stage: Deploy
-  jobs:
-  #--------------------------------------------#  
-  # Deploy FakeRestAPI Web App
-  # ToDo: Provide <environment name> you created in your DevOps project
-  - deployment: FakeRestAPI
-    # pool:
-    #   vmImage: 'Ubuntu-18.04'      
-    environment: 'staging-testing'   # ToDo
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App'
-            inputs:
-              azureSubscription: 'sc-final-project'     # ToDo
-              appName:  'fakerestapi-quocnc'              # ToDo
-              appType: webApp
-              package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'       # ToDo: Use the published zip artifact. 
-              deploymentMethod: 'auto'
-         
+        script: 'npm install newman' # ToDo: Write your commands to install newman
+        workingDirectory: $(System.DefaultWorkingDirectory)
+    # Postman Data Validation Test Suite    
+    # ToDo: Verify the working directory and the newman scripts
+    - task: CmdLine@2
+      displayName: Run Data Validation Tests
+      continueOnError: true
+      inputs:
+        script: "newman run automatedtesting/postman/TestSuite.Data-Validation.json -e automatedtesting/postman/Test.environment.json --reporters cli,junit --reporter-junit-export /automatedtesting/postman/result/data-validation-report.xml" # ToDo: Write your commands
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    # Postman Regression Test Suite    
+    # ToDo: Update the command and verify the working directory
+    - task: CmdLine@2
+      displayName: Run Regression Tests
+      continueOnError: true
+      inputs:
+        script: newman run automatedtesting/postman/TestSuite.Regression.json -e automatedtesting/postman/Test.environment.json --reporters cli,junit --reporter-junit-export /automatedtesting/postman/result/regression-report.xml          # ToDo: Write your commands
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    # Postman - Publish Results 
+    # ToDo: Complete the task as explained here: https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/test/publish-test-results?view=azure-devops&tabs=trx%2Cyaml#yaml-snippet
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '$(System.DefaultWorkingDirectory)/automatedtesting/postman/result/*.xml'
