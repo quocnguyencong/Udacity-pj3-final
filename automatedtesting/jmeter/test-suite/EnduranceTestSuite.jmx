@@ -21,7 +21,7 @@
           </elementProp>
           <elementProp name="server" elementType="Argument">
             <stringProp name="Argument.name">server</stringProp>
-            <stringProp name="Argument.value">fakerestapi-quocnc.azurewebsites.net</stringProp>
+            <stringProp name="Argument.value">google.com</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="port" elementType="Argument">
