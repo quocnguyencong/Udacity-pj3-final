@@ -23,7 +23,7 @@ stages:
 - stage: JMeter
   jobs:
   - job: JmetterTest
-    step:
+    steps:
     - task: CmdLine@2
       displayName: Install java
       inputs:
