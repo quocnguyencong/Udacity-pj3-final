@@ -27,7 +27,7 @@ stages:
     - task: CmdLine@2
       displayName: Install java
       inputs:
-        script: "apt install default-jdk, apt install default-jre"
+        script: "sudo apt install -y default-jdk, sudo apt install -y default-jre"
 
     - task: CmdLine@2
       displayName: Install JMeter
