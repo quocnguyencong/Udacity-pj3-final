@@ -35,7 +35,8 @@ stages:
         script: |
           wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
           tar zxvf apache-jmeter-5.5.tgz
-          mkdir jmeter_log
+          mkdir -p jmeter_log/StressHTMLreport
+          mkdir -p jmeter_log/EnduranceHTMLreport
     - task: CmdLine@2
       displayName: Run JMeter Stress test
       inputs:
