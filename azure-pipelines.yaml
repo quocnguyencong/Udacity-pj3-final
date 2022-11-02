@@ -32,7 +32,10 @@ stages:
     - task: CmdLine@2
       displayName: Install JMeter
       inputs:
-        script: "wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz, tar zxvf apache-jmeter-5.5.tgz, mkdir jmeter_log"
+        script: |
+          wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
+          tar zxvf apache-jmeter-5.5.tgz
+          mkdir jmeter_log
     - task: CmdLine@2
       displayName: Run JMeter Stress test
       inputs:
