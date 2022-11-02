@@ -20,49 +20,56 @@ variables:
   environmentName: 'staging-testing'
 
 stages:
-#--------------------------------------------#  
-# BUILD STAGE
-#--------------------------------------------#    
-- stage: Build
+- stage: JMeter
   jobs:
-  - job: BuildInfrastructure
-    steps:
-    #--------------------------------------------#    
-    # FakeRestAPI - Archive
-    # ToDo: Complete the ArchiveFiles@2 task and publish step 
-    - task: ArchiveFiles@2
-      displayName: 'Archive FakeRestAPI'
+  - job: JmetterTest
+    step:
+    - task: CmdLine@2
+      displayName: Install java
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
-        includeRootFolder: false
-        archiveType: "zip"
-        archiveFile: '$(Build.BuildId)-fakerestapi.zip'
-    # FakeRestAPI - Publish    
-    - publish: $(Build.BuildId)-fakerestapi.zip
-      displayName: 'Upload Package'
-      artifact: drop-fakerestapi
+        script: "apt install default-jdk, apt install default-jre"
 
-#--------------------------------------------#  
-# DEPLOYMENT STAGE
-#--------------------------------------------#    
-- stage: Deploy
-  jobs:
-  #--------------------------------------------#  
-  # Deploy FakeRestAPI Web App
-  # ToDo: Provide <environment name> you created in your DevOps project
-  - deployment: FakeRestAPI
-    # pool:
-    #   vmImage: 'Ubuntu-18.04'      
-    environment: 'staging-testing'   # ToDo
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App'
-            inputs:
-              azureSubscription: 'sc-final-project'     # ToDo
-              appName:  'fakerestapi-quocnc'              # ToDo
-              appType: webApp
-              package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'       # ToDo: Use the published zip artifact. 
-              deploymentMethod: 'auto'
+    - task: CmdLine@2
+      displayName: Install JMeter
+      inputs:
+        script: "wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz, tar zxvf apache-jmeter-5.5.tgz, mkdir jmeter_log"
+    - task: CmdLine@2
+      displayName: Run JMeter Stress test
+      inputs:
+        script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTestSuite.jmx -l jmeter_log/StressTestResult.csv -e -f -o jmeter_log/StressHTMLreport -j jmeter_log/StressTest.log"
+    
+    - task: CmdLine@2
+      displayName: Run JMeter Endurance test
+      inputs:
+        script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTestSuite.jmx -l jmeter_log/EnduranceTestResult.csv -e -f -o jmeter_log/EnduranceHTMLreport -j jmeter_log/EnduranceTest.log"
+
+    - task: ArchiveFiles@2
+      displayName: Archive JMeter Stress test HTML report
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/jmeter_log/StressHTMLreport'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(System.DefaultWorkingDirectory)/jmeter_log/StressHTMLreport-$(Build.BuildId).zip'
+        verbose: true
+
+    - task: ArchiveFiles@2
+      displayName: Archive JMeter Endurance test HTML report
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/jmeter_log/EnduranceHTMLreport'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(System.DefaultWorkingDirectory)/jmeter_log/EnduranceHTMLreport-$(Build.BuildId).zip'
+        verbose: true
+
+    - task: CmdLine@2
+      displayName: Remove HTML log folder
+      inputs:
+        script: "rm -rf jmeter_log/StressHTMLreport, rm -rf jmeter_log/EnduranceHTMLreport"
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish JMeter logs file
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/jmeter_log'
+        artifactName: 'drop-jmeter-logs'
+
+
