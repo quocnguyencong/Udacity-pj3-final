@@ -40,6 +40,7 @@ stages:
       artifact: drop-uitests
       
     - task: DownloadPipelineArtifact@2
+      displayName: 'download test script'
       inputs:
         artifact: drop-uitests
         path: $(System.DefaultWorkingDirectory)/download
