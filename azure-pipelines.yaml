@@ -53,8 +53,8 @@ stages:
           python3 -u test-script/login.py | tee selenium_log/test_result.log
           
     - task: PublishPipelineArtifact@1
-    displayName: Publish test result log
-    inputs:
-      targetPath: '$(System.DefaultWorkingDirectory)/selenium_log/test_result.log'
-      artifactName: 'drop-uitests-logs'
+      displayName: Publish test result log
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/selenium_log/test_result.log'
+        artifactName: 'drop-uitests-logs'
     
