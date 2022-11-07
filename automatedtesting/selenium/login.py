@@ -33,12 +33,6 @@ def login (user, password):
 
 
 driver = login('standard_user', 'secret_sauce')
-
-# wait = WebDriverWait(driver, 10)
-# wait.until(EC.element_to_be_clickable((By.ID, 'add-to-cart-sauce-labs-backpack')))
 add_remove_from_cart.add_all_product(driver)
-
-# wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.shopping_cart_link')))
 add_remove_from_cart.remove_product_from_cart(driver)
-
 print("Testing finish.")
