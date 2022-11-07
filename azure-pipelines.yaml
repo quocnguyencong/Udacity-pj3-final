@@ -50,7 +50,7 @@ stages:
         script: |
           unzip -o $(System.DefaultWorkingDirectory)/download/$(Build.BuildId)-uitests.zip -d test-script
           mkdir selenium_log
-          python3 -u test-script/login.py | tee selenium_log/test_result.log
+          sudo python3 -u test-script/login.py | sudo tee selenium_log/test_result.log
           
     - task: PublishPipelineArtifact@1
       displayName: Publish test result log
