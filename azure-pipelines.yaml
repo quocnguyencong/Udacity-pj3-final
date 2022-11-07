@@ -20,62 +20,41 @@ variables:
   environmentName: 'staging-testing'
 
 stages:
-- stage: JMeter
+- stage: Selenium
   jobs:
-  - job: JmetterTest
+  - job: SeleniumUITest
     steps:
-    - task: CmdLine@2
-      displayName: Install java
-      inputs:
-        script: |
-          sudo apt-get install openjdk-11-jre-headless -y
-          sudo apt-get install openjdk-11-jdk -y
-
-    - task: CmdLine@2
-      displayName: Install JMeter
-      inputs:
-        script: |
-          wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
-          tar zxvf apache-jmeter-5.5.tgz
-          mkdir -p jmeter_log/StressHTMLreport
-          mkdir -p jmeter_log/EnduranceHTMLreport
-    - task: CmdLine@2
-      displayName: Run JMeter Stress test
-      inputs:
-        script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTestSuite.jmx -l jmeter_log/StressTestResult.csv -e -f -o jmeter_log/StressHTMLreport -j jmeter_log/StressTest.log"
-    
-    - task: CmdLine@2
-      displayName: Run JMeter Endurance test
-      inputs:
-        script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTestSuite.jmx -l jmeter_log/EnduranceTestResult.csv -e -f -o jmeter_log/EnduranceHTMLreport -j jmeter_log/EnduranceTest.log"
-
+    #--------------------------------------------#
+    # Selenium (UI) Test Suite - Archive the package  
+    # "ArchiveFiles@2" picks up the web package and archives it.
     - task: ArchiveFiles@2
-      displayName: Archive JMeter Stress test HTML report
+      displayName: 'Archive UI Tests'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/jmeter_log/StressHTMLreport'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(System.DefaultWorkingDirectory)/jmeter_log/StressHTMLreport-$(Build.BuildId).zip'
-        verbose: true
-
-    - task: ArchiveFiles@2
-      displayName: Archive JMeter Endurance test HTML report
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-uitests.zip'
+    # Selenium Test Suite - Publish the package  
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-uitests.zip   # Same as the archiveFile artifact above. 
+      displayName: 'Upload Package'
+      artifact: drop-uitests
+      
+    - task: DownloadPipelineArtifact@2
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/jmeter_log/EnduranceHTMLreport'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(System.DefaultWorkingDirectory)/jmeter_log/EnduranceHTMLreport-$(Build.BuildId).zip'
-        verbose: true
-
+        artifact: drop-uitests
+        path: $(System.DefaultWorkingDirectory)/download
+      
     - task: CmdLine@2
-      displayName: Remove HTML log folder
+      displayName: extract test script and run test
       inputs:
-        script: "rm -rf jmeter_log/StressHTMLreport, rm -rf jmeter_log/EnduranceHTMLreport"
-
+        script: |
+          unzip -o $(System.DefaultWorkingDirectory)/download/$(Build.BuildId)-uitests.zip -d test-script
+          mkdir selenium_log
+          python3 -u test-script/login.py | tee selenium_log/test_result.log
+          
     - task: PublishPipelineArtifact@1
-      displayName: Publish JMeter logs file
+      displayName: Publish test result log
       inputs:
-        targetPath: '$(System.DefaultWorkingDirectory)/jmeter_log'
-        artifactName: 'drop-jmeter-logs'
-
-
+        targetPath: '$(System.DefaultWorkingDirectory)/selenium_log/test_result.log'
+        artifactName: 'drop-uitests-logs'
+    
