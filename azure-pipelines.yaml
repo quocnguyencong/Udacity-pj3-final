@@ -49,6 +49,12 @@ stages:
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: '4B7CJLr8QYBWgeHqE+uvPGsC/z86C1T7eTfMruNKyJ+dn2SLM/sKHmrcUVs3R3L192wllhZDsSo6+AStwidLPQ=='
 
+    - task: TerraformTaskV3@3
+      displayName: Terraform unlock
+      inputs:
+        provider: 'azurerm'
+        command: 'force-unlock'
+        
     # ToDo: Run Terraform Validate    
     - task: TerraformTaskV3@3
       displayName: Terraform validate
