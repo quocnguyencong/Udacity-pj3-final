@@ -79,7 +79,9 @@ stages:
       displayName: Terraform apply
       inputs:
         provider: 'azurerm'
-        command: 'apply'
+        command: |
+          plan -lock=false
+          apply
         commandOptions: |
             -auto-approve
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
