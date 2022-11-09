@@ -52,7 +52,7 @@ stages:
     - task: TerraformTaskV3@3
       displayName: Terraform unlock
       inputs:
-        command: 'azurerm force-unlock'
+        command: 'terraform force-unlock'
         
     # ToDo: Run Terraform Validate    
     - task: TerraformTaskV3@3
