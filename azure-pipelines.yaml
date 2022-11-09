@@ -48,11 +48,6 @@ stages:
         backendAzureRmStorageAccountName: 'tfstate2417926753'
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: '4B7CJLr8QYBWgeHqE+uvPGsC/z86C1T7eTfMruNKyJ+dn2SLM/sKHmrcUVs3R3L192wllhZDsSo6+AStwidLPQ=='
-
-    - task: TerraformTaskV3@3
-      displayName: Terraform unlock
-      inputs:
-        command: 'terraform force-unlock'
         
     # ToDo: Run Terraform Validate    
     - task: TerraformTaskV3@3
@@ -76,6 +71,13 @@ stages:
     #  displayName: 
     #  inputs:
     #   secureFile: 
+    - task: TerraformTaskV3@3
+        displayName: Terraform Plan
+        inputs:
+          provider: 'azurerm'
+          command: 'plan -lock-false'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+          environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
     # Run Terraform Apply
     # ToDo: Change the workingDirectory path, as applicable to you
