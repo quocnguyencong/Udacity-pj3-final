@@ -72,12 +72,12 @@ stages:
     #  inputs:
     #   secureFile: 
     - task: TerraformTaskV3@3
-        displayName: Terraform Plan
-        inputs:
-          provider: 'azurerm'
-          command: 'plan -lock-false'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
-          environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
+      displayName: Terraform Plan
+      inputs:
+        provider: 'azurerm'
+        command: 'plan -lock-false'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
     # Run Terraform Apply
     # ToDo: Change the workingDirectory path, as applicable to you
