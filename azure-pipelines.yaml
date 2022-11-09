@@ -82,7 +82,6 @@ stages:
         command: 'apply'
         commandOptions: |
             -auto-approve
-            -lock=false
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
