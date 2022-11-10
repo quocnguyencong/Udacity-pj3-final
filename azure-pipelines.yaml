@@ -75,7 +75,7 @@ stages:
       displayName: Terraform Plan
       inputs:
         provider: 'azurerm'
-        command: 'plan -lock=false'
+        command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
