@@ -65,6 +65,6 @@ module "vm" {
   resource_group  = "${var.resource_group}"
   subnet_id       = "${module.network.subnet_id_test}"
   public_ip       = "${module.publicip.public_ip_address_id}"
-  vm_image_id     = "${var.vm_image_id}"
+  vm_image_id     = "/subscriptions/0946c94a-63eb-4f75-aebc-6183a4abc13f/resourceGroups/Azuredevops/providers/Microsoft.Compute/images/myVM-image-20221024233247"
   #admin_username  = "${var.admin_username}"
 }
