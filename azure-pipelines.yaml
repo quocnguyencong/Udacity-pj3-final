@@ -72,6 +72,15 @@ stages:
     #  inputs:
     #   secureFile: 
     - task: TerraformTaskV3@3
+      displayName: Terraform unlock
+      inputs:
+        provider: 'azurerm'
+        command: 'force-unlock'
+        commandOptions: '431f7948-c139-7736-faa2-09dbf474729c'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
+
+    - task: TerraformTaskV3@3
       displayName: Terraform Plan
       inputs:
         provider: 'azurerm'
