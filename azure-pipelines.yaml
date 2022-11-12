@@ -211,12 +211,12 @@ stages:
   jobs:
   - job: JmetterTest
     steps:
-    - task: CmdLine@2
-      displayName: Install java
-      inputs:
-        script: |
-          sudo apt-get install openjdk-11-jre-headless -y
-          sudo apt-get install openjdk-11-jdk -y
+    # - task: CmdLine@2
+    #   displayName: Install java
+    #   inputs:
+    #     script: |
+    #       sudo apt-get install openjdk-11-jre-headless -y
+    #       sudo apt-get install openjdk-11-jdk -y
     - task: CmdLine@2
       displayName: Install JMeter
       inputs:
