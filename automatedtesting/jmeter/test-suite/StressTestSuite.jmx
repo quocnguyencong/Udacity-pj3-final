@@ -87,7 +87,7 @@
         <stringProp name="fileEncoding"></stringProp>
         <stringProp name="filename">csv/Books.csv</stringProp>
         <boolProp name="ignoreFirstLine">true</boolProp>
-        <boolProp name="quotedData">false</boolProp>
+        <boolProp name="quotedData">true</boolProp>
         <boolProp name="recycle">true</boolProp>
         <stringProp name="shareMode">shareMode.all</stringProp>
         <boolProp name="stopThread">false</boolProp>
@@ -121,7 +121,7 @@
       <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Users" enabled="true">
         <stringProp name="delimiter">,</stringProp>
         <stringProp name="fileEncoding"></stringProp>
-        <stringProp name="filename">csv/CoverPhotos_idBook.csv</stringProp>
+        <stringProp name="filename">csv/Users.csv</stringProp>
         <boolProp name="ignoreFirstLine">true</boolProp>
         <boolProp name="quotedData">false</boolProp>
         <boolProp name="recycle">true</boolProp>
@@ -136,7 +136,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">50</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
