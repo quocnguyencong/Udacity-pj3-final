@@ -2,10 +2,8 @@ resource "azurerm_service_plan" "test" {
   name                = "fakerestapi-quocnc"
   location            = "${var.location}"
   resource_group_name = "${var.resource_group}"
-  sku {
-    tier = "Free"
-    size = "F1"
-  }
+  os_type             = "Linux"
+  sku_name            = "F1"
 }
 
 resource "azurerm_linux_web_app" "test" {
