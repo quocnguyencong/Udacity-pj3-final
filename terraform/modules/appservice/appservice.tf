@@ -1,5 +1,5 @@
 resource "azurerm_service_plan" "test" {
-  name                = "fakerestapi-quocnc"
+  name                = "${var.application_type}-${var.resource_type}"
   location            = "${var.location}"
   resource_group_name = "${var.resource_group}"
   os_type             = "Linux"
@@ -7,7 +7,7 @@ resource "azurerm_service_plan" "test" {
 }
 
 resource "azurerm_linux_web_app" "test" {
-  name                = "fakerestapi-quocnc"
+  name                = "${var.application_type}-${var.resource_type}"
   location            = "${var.location}"
   resource_group_name = "${var.resource_group}"
   service_plan_id     = azurerm_service_plan.test.id

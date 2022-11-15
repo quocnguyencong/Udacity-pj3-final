@@ -7,7 +7,7 @@ tenant_id = "f01e930a-b52e-42b1-b70f-a8882b5d043b"
 # Resource Group/Location
 location = "East US"
 resource_group = "Azuredevops"
-application_type = "myApplication"
+application_type = "fakerestapi-quocnc"
 
 # Network
 virtual_network_name = "test-vnw"
