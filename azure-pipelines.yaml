@@ -218,20 +218,18 @@ stages:
     #     script: |
     #       sudo apt-get install openjdk-11-jre-headless -y
     #       sudo apt-get install openjdk-11-jdk -y
-    - task: CmdLine@2
+    - task: Bash@3
       displayName: Install JMeter
       inputs:
         script: |
           wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
           tar zxvf apache-jmeter-5.5.tgz
-          mkdir -p jmeter_log/StressHTMLreport
-          mkdir -p jmeter_log/EnduranceHTMLreport
-    - task: CmdLine@2
+    - task: Bash@3
       displayName: Run JMeter Stress test
       inputs:
         script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTestSuite.jmx -l jmeter_log/StressTestResult.csv -e -f -o jmeter_log/StressHTMLreport -j jmeter_log/StressTest.log"
     
-    - task: CmdLine@2
+    - task: Bash@3
       displayName: Run JMeter Endurance test
       inputs:
         script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTestSuite.jmx -l jmeter_log/EnduranceTestResult.csv -e -f -o jmeter_log/EnduranceHTMLreport -j jmeter_log/EnduranceTest.log"
@@ -254,7 +252,7 @@ stages:
         archiveFile: '$(System.DefaultWorkingDirectory)/jmeter_log/EnduranceHTMLreport-$(Build.BuildId).zip'
         verbose: true
 
-    - task: CmdLine@2
+    - task: Bash@3
       displayName: Remove HTML log folder
       inputs:
         script: "rm -rf jmeter_log/StressHTMLreport, rm -rf jmeter_log/EnduranceHTMLreport"
