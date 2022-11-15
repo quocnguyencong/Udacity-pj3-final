@@ -52,22 +52,17 @@ stages:
     #     script: |
     #       sudo apt-get install openjdk-11-jre-headless -y
     #       sudo apt-get install openjdk-11-jdk -y
-    - task: Bash@3
+    - bash: |
+        wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
+        tar zxvf apache-jmeter-5.5.tgz
       displayName: Install JMeter
-      inputs:
-        script: |
-          wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
-          tar zxvf apache-jmeter-5.5.tgz
-    - task: Bash@3
-      displayName: Run JMeter Stress test
-      inputs:
-        script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTestSuite.jmx -l jmeter_log/StressTestResult.csv -e -f -o jmeter_log/StressHTMLreport -j jmeter_log/StressTest.log"
     
-    - task: Bash@3
+    - bash: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTestSuite.jmx -l jmeter_log/StressTestResult.csv -e -f -o jmeter_log/StressHTMLreport -j jmeter_log/StressTest.log"
+      displayName: Run JMeter Stress test
+      
+    - bash: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTestSuite.jmx -l jmeter_log/EnduranceTestResult.csv -e -f -o jmeter_log/EnduranceHTMLreport -j jmeter_log/EnduranceTest.log"
       displayName: Run JMeter Endurance test
-      inputs:
-        script: "apache-jmeter-5.5/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTestSuite.jmx -l jmeter_log/EnduranceTestResult.csv -e -f -o jmeter_log/EnduranceHTMLreport -j jmeter_log/EnduranceTest.log"
-
+      
     - task: ArchiveFiles@2
       displayName: Archive JMeter Stress test HTML report
       inputs:
