@@ -1,0 +1,20 @@
+Starting the browser...
+Browser started successfully. Navigating to the demo page to login.
+Starting login...
+input user and password
+click login
+find products label
+Login successfully!
+Get all product by css selector
+Product count: 6
+Add all product to shopping cart
+Product added: 6
+click on shopping cart icon
+find and count product in shopping cart
+Added all products successfully.
+find all item to remove from shopping cart
+Product count: 6
+Product removed: 6
+Products existed in cart 0
+Removed all products successfully.
+Testing finish.
